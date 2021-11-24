@@ -8,7 +8,7 @@ async function connect() {
             useFindAndModify: false,
             useCreateIndex: true,
         })
-        console.log('Connect DB successfully')
+        console.log('Connect MongoDB successfully')
     } catch (error) {
         console.log('Connect failure')
     }

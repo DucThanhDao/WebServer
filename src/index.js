@@ -4,38 +4,7 @@ const methodOverride = require('method-override')
 const handlebars = require('express-handlebars')
 const path = require('path')
 const app = express()
-
-// -------------- SETUP MQTT ------------------
-// --------------------------------------------
-const mqtt = require('mqtt')
-require('dotenv').config()
-const options = {
-    username: process.env.MQTT_USERNAME,
-    password: process.env.MQTT_PASSWORD,
-}
-const client = mqtt.connect('mqtt://iot.phuctruong.net:2000', options)
-
-client.on('connect', function () {
-    client.subscribe('topic')
-})
-
-client.on('message', function (topic, message) {
-    try {
-        let data = JSON.parse(message.toString())
-        console.log(data)
-        client.end()
-    } catch {
-        console.log('Error')
-        client.end()
-    }
-})
-
-let dataSend = '{"temp": 27.6, "humid": 84, "name": "minhthanh" }'
-
-setInterval(() => {
-    client.publish('topic', dataSend)
-}, 5000)
-// -------------------------------------------
+require('../saveModbus')
 
 // Khắc phục lỗi cors khi gọi API bên frontend
 // app.use(cors({origin: true}))
@@ -130,5 +99,4 @@ app.use(methodOverride('_method'))
 
 // Routes init khởi tạo tuyến đường
 route(app)
-
 app.listen(8080, '0.0.0.0')
